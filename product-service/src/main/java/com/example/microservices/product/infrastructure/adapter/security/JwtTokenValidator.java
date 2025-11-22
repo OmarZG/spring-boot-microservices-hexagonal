@@ -34,11 +34,11 @@ public class JwtTokenValidator {
                 loadPublicKey();
             }
 
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(publicKey)
+            Claims claims = Jwts.parser()
+                    .verifyWith(publicKey)
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
 
             return claims.getSubject();
         } catch (Exception e) {
@@ -56,10 +56,10 @@ public class JwtTokenValidator {
                 loadPublicKey();
             }
 
-            Jwts.parserBuilder()
-                    .setSigningKey(publicKey)
+            Jwts.parser()
+                    .verifyWith(publicKey)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
 
             return true;
         } catch (SecurityException ex) {

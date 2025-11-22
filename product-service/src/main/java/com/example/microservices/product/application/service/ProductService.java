@@ -34,7 +34,7 @@ public class ProductService implements ProductUseCase {
         log.info("Updating product with id: {}", id);
 
         if (!productPort.existsById(id)) {
-            throw new ProductNotFoundException(id);
+            throw ProductNotFoundException.byId(id);
         }
 
         product.setId(id);
@@ -48,7 +48,7 @@ public class ProductService implements ProductUseCase {
         log.info("Deleting product with id: {}", id);
 
         if (!productPort.existsById(id)) {
-            throw new ProductNotFoundException(id);
+            throw ProductNotFoundException.byId(id);
         }
 
         productPort.deleteById(id);
@@ -59,7 +59,7 @@ public class ProductService implements ProductUseCase {
     public Product findById(String id) {
         log.debug("Finding product by id: {}", id);
         return productPort.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> ProductNotFoundException.byId(id));
     }
 
     @Override

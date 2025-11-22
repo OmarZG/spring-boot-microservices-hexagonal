@@ -9,7 +9,7 @@ public class ProductNotFoundException extends RuntimeException {
         super(message);
     }
 
-    public ProductNotFoundException(String id) {
-        super("Product not found with id: " + id);
+    public static ProductNotFoundException byId(String id) {
+        return new ProductNotFoundException("Product not found with id: " + id);
     }
 }

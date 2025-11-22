@@ -1,7 +1,6 @@
 package com.example.microservices.auth.infrastructure.adapter.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -61,12 +60,12 @@ public class JwtTokenProvider {
                     .collect(Collectors.joining(","));
 
             return Jwts.builder()
-                    .setSubject(username)
-                    .setIssuedAt(now)
-                    .setExpiration(expiryDate)
-                    .setIssuer(jwtIssuer)
+                    .subject(username)
+                    .issuedAt(now)
+                    .expiration(expiryDate)
+                    .issuer(jwtIssuer)
                     .claim("roles", roles)
-                    .signWith(privateKey, SignatureAlgorithm.RS256)
+                    .signWith(privateKey, Jwts.SIG.RS256)
                     .compact();
         } catch (Exception e) {
             log.error("Error generating JWT token", e);
@@ -83,11 +82,11 @@ public class JwtTokenProvider {
                 loadKeys();
             }
 
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(publicKey)
+            Claims claims = Jwts.parser()
+                    .verifyWith(publicKey)
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
 
             return claims.getSubject();
         } catch (Exception e) {
@@ -105,10 +104,10 @@ public class JwtTokenProvider {
                 loadKeys();
             }
 
-            Jwts.parserBuilder()
-                    .setSigningKey(publicKey)
+            Jwts.parser()
+                    .verifyWith(publicKey)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
 
             return true;
         } catch (SecurityException ex) {
