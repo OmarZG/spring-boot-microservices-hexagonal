@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: product-service
+  
+  profiles:
+    active: dev
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/productdb}
+      auto-index-creation: true
+
+server:
+  port: ${SERVER_PORT:8082}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration (public key only for validation)
+jwt:
+  public-key-path: ${JWT_PUBLIC_KEY_PATH:certs/public_key.pem}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.example.microservices.product: ${LOG_LEVEL:DEBUG}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:DEBUG}
+    org.springframework.data.mongodb: ${MONGODB_LOG_LEVEL:DEBUG}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

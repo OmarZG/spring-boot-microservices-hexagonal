@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: auth-service
+  
+  profiles:
+    active: dev
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    show-sql: ${SHOW_SQL:false}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+
+server:
+  port: ${SERVER_PORT:8081}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
+  issuer: ${JWT_ISSUER:auth-service}
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:certs/private_key.pem}
+  public-key-path: ${JWT_PUBLIC_KEY_PATH:certs/public_key.pem}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.example.microservices.auth: ${LOG_LEVEL:DEBUG}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:DEBUG}
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:DEBUG}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

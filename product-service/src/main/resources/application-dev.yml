@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/productdb
+
+logging:
+  level:
+    com.example.microservices.product: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.data.mongodb: DEBUG

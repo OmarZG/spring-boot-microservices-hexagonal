@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+
+logging:
+  level:
+    com.example.microservices.product: INFO
+    org.springframework.security: WARN
+    org.springframework.data.mongodb: WARN
