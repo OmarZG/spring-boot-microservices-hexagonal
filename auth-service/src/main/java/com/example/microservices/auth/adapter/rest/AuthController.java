@@ -63,6 +63,7 @@ public class AuthController {
      * Get current authenticated user
      */
     @GetMapping("/me")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('USER', 'MODERATOR', 'ADMIN')")
     public ResponseEntity<ApiResponse<UserDTO>> getCurrentUser() {
         User user = authService.getCurrentUser();
         UserDTO userDTO = userMapper.toDTO(user);

@@ -1,5 +1,6 @@
 package com.example.microservices.auth.infrastructure.adapter.security;
 
+import com.example.microservices.common.security.RsaKeyUtils;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,14 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -137,10 +132,8 @@ public class JwtTokenProvider {
      * Load RSA keys from files
      */
     private void loadKeys() throws Exception {
-        // Delegate key loading to utility class
-        this.privateKey = com.example.microservices.auth.infrastructure.util.KeyUtils
-                .loadPrivateKey(privateKeyResource);
-        this.publicKey = com.example.microservices.auth.infrastructure.util.KeyUtils.loadPublicKey(publicKeyResource);
+        this.privateKey = RsaKeyUtils.loadPrivateKey(privateKeyResource);
+        this.publicKey = RsaKeyUtils.loadPublicKey(publicKeyResource);
         log.info("RSA keys loaded successfully");
     }
 }

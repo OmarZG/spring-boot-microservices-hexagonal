@@ -1,6 +1,6 @@
 # Microservices Hexagonal Architecture
 
-Implementación completa de microservicios con Spring Boot 3.4.1, Java 21, arquitectura hexagonal, JWT con firma RSA, y bases de datos PostgreSQL y MongoDB.
+Implementación completa de microservicios con Spring Boot 3+, Java 21, arquitectura hexagonal, JWT con firma RSA, y bases de datos PostgreSQL y MongoDB.
 
 ## 🏗️ Arquitectura
 
@@ -45,7 +45,7 @@ microservices-hexagonal/
 ## 🚀 Tecnologías
 
 - **Java 21**
-- **Spring Boot 3.4.1**
+- **Spring Boot 3+**
 - **Spring Security** con JWT
 - **PostgreSQL 16** (auth-service)
 - **MongoDB 7** (product-service)
@@ -236,6 +236,38 @@ Authorization: Bearer {token}
 - **Validación de tokens en product-service usando clave pública**
 - **Roles y permisos granulares**
 
+### Roles y Permisos
+
+El sistema implementa control de acceso basado en roles (RBAC) con permisos granulares:
+
+| Rol | Permisos |
+|-----|----------|
+| **USER** | `product:read` |
+| **MODERATOR** | `user:read`, `user:update`, `user:moderate`, `product:read`, `product:create`, `product:update` |
+| **ADMIN** | `user:read`, `user:create`, `user:update`, `user:delete`, `product:read`, `product:create`, `product:update`, `product:delete`, `admin:all` |
+
+### Matriz de Autorización por Endpoint
+
+#### Auth Service
+
+| Endpoint | Método | Permisos Requeridos | Roles con Acceso |
+|----------|--------|---------------------|------------------|
+| `/api/auth/register` | POST | Público | Todos |
+| `/api/auth/login` | POST | Público | Todos |
+| `/api/auth/me` | GET | Autenticado | USER, MODERATOR, ADMIN |
+
+#### Product Service
+
+| Endpoint | Método | Permisos Requeridos | Roles con Acceso |
+|----------|--------|---------------------|------------------|
+| `GET /api/products` | GET | `product:read` o `admin:all` | USER, MODERATOR, ADMIN |
+| `GET /api/products/{id}` | GET | `product:read` o `admin:all` | USER, MODERATOR, ADMIN |
+| `POST /api/products` | POST | `product:create` o `admin:all` | MODERATOR, ADMIN |
+| `PUT /api/products/{id}` | PUT | `product:update` o `admin:all` | MODERATOR, ADMIN |
+| `DELETE /api/products/{id}` | DELETE | `product:delete` o `admin:all` | ADMIN |
+
+**Nota**: Todos los endpoints de Product Service requieren un JWT válido en el header `Authorization: Bearer {token}`.
+
 ## 📊 Respuestas Estandarizadas
 
 ### Respuesta Exitosa (ApiResponse)
@@ -302,7 +334,7 @@ curl -X POST http://localhost:8082/api/products \
 ## 🎯 Características Implementadas
 
 ✅ Arquitectura Hexagonal (Puertos y Adaptadores)  
-✅ Spring Boot 3.4.1 con Java 21  
+✅ Spring Boot 3+ con Java 21  
 ✅ JWT firmado con RSA  
 ✅ PostgreSQL para usuarios (JPA)  
 ✅ MongoDB para productos  

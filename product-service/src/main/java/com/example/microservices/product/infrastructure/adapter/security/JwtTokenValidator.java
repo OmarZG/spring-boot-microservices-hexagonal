@@ -1,16 +1,13 @@
 package com.example.microservices.product.infrastructure.adapter.security;
 
+import com.example.microservices.common.security.RsaKeyUtils;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Files;
-import java.security.KeyFactory;
 import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
 /**
  * JWT Token Validator for product-service
@@ -79,24 +76,10 @@ public class JwtTokenValidator {
     }
 
     /**
-     * Load RSA public key from file
+     * Load RSA public key from file using RsaKeyUtils
      */
-    private void loadPublicKey() throws Exception {
-        try {
-            String publicKeyPEM = new String(Files.readAllBytes(publicKeyResource.getFile().toPath()))
-                    .replace("-----BEGIN PUBLIC KEY-----", "")
-                    .replace("-----END PUBLIC KEY-----", "")
-                    .replaceAll("\\s", "");
-
-            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyPEM);
-            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            this.publicKey = keyFactory.generatePublic(publicKeySpec);
-
-            log.info("RSA public key loaded successfully");
-        } catch (Exception e) {
-            log.error("Error loading RSA public key", e);
-            throw new RuntimeException("Error loading RSA public key", e);
-        }
+    private void loadPublicKey() {
+        this.publicKey = RsaKeyUtils.loadPublicKey(publicKeyResource);
+        log.info("RSA public key loaded successfully");
     }
 }

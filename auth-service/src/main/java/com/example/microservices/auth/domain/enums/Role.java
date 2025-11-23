@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
  */
 public enum Role {
     USER(Set.of(
-            "user:read",
-            "user:update")),
+            "product:read")),
     MODERATOR(Set.of(
             "user:read",
             "user:update",
