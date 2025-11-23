@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ProductController {
      * Get all products
      */
     @GetMapping
-    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('product:read', 'admin:all')")
+    @PreAuthorize("hasAnyAuthority('product:read', 'admin:all')")
     public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
         log.info("Getting all products");
 
@@ -49,7 +50,7 @@ public class ProductController {
      * Get product by ID
      */
     @GetMapping("/{id}")
-    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('product:read', 'admin:all')")
+    @PreAuthorize("hasAnyAuthority('product:read', 'admin:all')")
     public ResponseEntity<ApiResponse<ProductDTO>> getProductById(@PathVariable String id) {
         log.info("Getting product by id: {}", id);
 
@@ -63,7 +64,7 @@ public class ProductController {
      * Create new product
      */
     @PostMapping
-    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('product:create', 'admin:all')")
+    @PreAuthorize("hasAnyAuthority('product:create', 'admin:all')")
     public ResponseEntity<ApiResponse<ProductDTO>> createProduct(@Valid @RequestBody CreateProductRequest request) {
         log.info("Creating new product: {}", request.name());
 
@@ -80,7 +81,7 @@ public class ProductController {
      * Update existing product
      */
     @PutMapping("/{id}")
-    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('product:update', 'admin:all')")
+    @PreAuthorize("hasAnyAuthority('product:update', 'admin:all')")
     public ResponseEntity<ApiResponse<ProductDTO>> updateProduct(
             @PathVariable String id,
             @Valid @RequestBody UpdateProductRequest request) {
@@ -99,7 +100,7 @@ public class ProductController {
      * Delete product
      */
     @DeleteMapping("/{id}")
-    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority('product:delete', 'admin:all')")
+    @PreAuthorize("hasAnyAuthority('product:delete', 'admin:all')")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable String id) {
         log.info("Deleting product: {}", id);
 

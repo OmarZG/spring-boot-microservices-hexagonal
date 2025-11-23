@@ -1,0 +1,628 @@
+{
+	"info": {
+		"_postman_id": "acf5ad68-39da-489d-b5fb-3ca1df9680c2",
+		"name": "Microservices Hexagonal - Complete API Tests",
+		"description": "Complete collection for testing authentication, authorization, and exception handling",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Register USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Response has success code\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.code).to.eql(\"SUCCESS\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"USER\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/register",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Register MODERATOR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"moderator1\",\n  \"email\": \"moderator1@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"MODERATOR\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/register",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Register ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin1\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/register",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login as USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"user_token\", jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user1\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/login",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login as MODERATOR",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"moderator_token\", jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"moderator1\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/login",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login as ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"admin_token\", jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/login",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Current User (with token)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{auth_url}}/api/auth/me",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Exception Handling Tests",
+			"item": [
+				{
+					"name": "Validation Error - Invalid Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Error code is VALIDATION_ERROR\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errorCode).to.eql(\"VALIDATION_ERROR\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"test\",\n  \"email\": \"invalid-email\",\n  \"password\": \"Pass123!\",\n  \"role\": \"USER\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/register",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Authentication Error - Wrong Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"pm.test(\"Error code is INVALID_CREDENTIALS\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errorCode).to.eql(\"INVALID_CREDENTIALS\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user1\",\n  \"password\": \"WrongPassword!\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/login",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Access Denied - No Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 or 403\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auth_url}}/api/auth/me",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				},
+				{
+					"name": "User Already Exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});",
+									"pm.test(\"Error code is USER_ALREADY_EXISTS\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errorCode).to.eql(\"USER_ALREADY_EXISTS\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"USER\"\n}"
+						},
+						"url": {
+							"raw": "{{auth_url}}/api/auth/register",
+							"host": ["{{auth_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Product Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"pm.test(\"Error code is PRODUCT_NOT_FOUND\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errorCode).to.eql(\"PRODUCT_NOT_FOUND\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{product_url}}/api/products/nonexistent-id",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products", "nonexistent-id"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Authorization Tests - Products",
+			"item": [
+				{
+					"name": "USER - Read Products (✅ Allowed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{product_url}}/api/products",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products"]
+						}
+					}
+				},
+				{
+					"name": "USER - Create Product (❌ Forbidden)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"pm.test(\"Error code is ACCESS_DENIED\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errorCode).to.eql(\"ACCESS_DENIED\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test Product\",\n  \"description\": \"Test Description\",\n  \"price\": 99.99,\n  \"category\": \"ELECTRONICS\",\n  \"stock\": 10\n}"
+						},
+						"url": {
+							"raw": "{{product_url}}/api/products",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products"]
+						}
+					}
+				},
+				{
+					"name": "MODERATOR - Create Product (✅ Allowed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.id) {",
+									"    pm.collectionVariables.set(\"product_id\", jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{moderator_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Laptop Gaming\",\n  \"description\": \"High-performance gaming laptop\",\n  \"price\": 1299.99,\n  \"category\": \"ELECTRONICS\",\n  \"stock\": 50\n}"
+						},
+						"url": {
+							"raw": "{{product_url}}/api/products",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products"]
+						}
+					}
+				},
+				{
+					"name": "MODERATOR - Update Product (✅ Allowed)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{moderator_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 1199.99,\n  \"stock\": 45\n}"
+						},
+						"url": {
+							"raw": "{{product_url}}/api/products/{{product_id}}",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						}
+					}
+				},
+				{
+					"name": "MODERATOR - Delete Product (❌ Forbidden)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{moderator_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{product_url}}/api/products/{{product_id}}",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						}
+					}
+				},
+				{
+					"name": "ADMIN - Delete Product (✅ Allowed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{product_url}}/api/products/{{product_id}}",
+							"host": ["{{product_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "auth_url",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "product_url",
+			"value": "http://localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "moderator_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "product_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

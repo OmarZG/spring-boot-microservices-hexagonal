@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -63,7 +64,7 @@ public class AuthController {
      * Get current authenticated user
      */
     @GetMapping("/me")
-    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('USER', 'MODERATOR', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'MODERATOR', 'ADMIN')")
     public ResponseEntity<ApiResponse<UserDTO>> getCurrentUser() {
         User user = authService.getCurrentUser();
         UserDTO userDTO = userMapper.toDTO(user);
