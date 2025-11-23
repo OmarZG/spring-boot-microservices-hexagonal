@@ -45,6 +45,32 @@ public class JwtTokenValidator {
     }
 
     /**
+     * Get roles from JWT token
+     */
+    public java.util.List<String> getRolesFromToken(String token) {
+        try {
+            if (publicKey == null) {
+                loadPublicKey();
+            }
+
+            Claims claims = Jwts.parser()
+                    .verifyWith(publicKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            String rolesString = claims.get("roles", String.class);
+            if (rolesString != null && !rolesString.isEmpty()) {
+                return java.util.Arrays.asList(rolesString.split(","));
+            }
+            return java.util.Collections.emptyList();
+        } catch (Exception e) {
+            log.error("Error extracting roles from token", e);
+            return java.util.Collections.emptyList();
+        }
+    }
+
+    /**
      * Validate JWT token
      */
     public boolean validateToken(String token) {
