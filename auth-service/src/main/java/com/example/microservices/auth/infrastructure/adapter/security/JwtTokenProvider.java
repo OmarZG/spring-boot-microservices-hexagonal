@@ -137,32 +137,10 @@ public class JwtTokenProvider {
      * Load RSA keys from files
      */
     private void loadKeys() throws Exception {
-        try {
-            // Load private key
-            String privateKeyPEM = new String(Files.readAllBytes(privateKeyResource.getFile().toPath()))
-                    .replace("-----BEGIN PRIVATE KEY-----", "")
-                    .replace("-----END PRIVATE KEY-----", "")
-                    .replaceAll("\\s", "");
-
-            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyPEM);
-            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            this.privateKey = keyFactory.generatePrivate(privateKeySpec);
-
-            // Load public key
-            String publicKeyPEM = new String(Files.readAllBytes(publicKeyResource.getFile().toPath()))
-                    .replace("-----BEGIN PUBLIC KEY-----", "")
-                    .replace("-----END PUBLIC KEY-----", "")
-                    .replaceAll("\\s", "");
-
-            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyPEM);
-            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-            this.publicKey = keyFactory.generatePublic(publicKeySpec);
-
-            log.info("RSA keys loaded successfully");
-        } catch (IOException e) {
-            log.error("Error loading RSA keys", e);
-            throw new RuntimeException("Error loading RSA keys", e);
-        }
+        // Delegate key loading to utility class
+        this.privateKey = com.example.microservices.auth.infrastructure.util.KeyUtils
+                .loadPrivateKey(privateKeyResource);
+        this.publicKey = com.example.microservices.auth.infrastructure.util.KeyUtils.loadPublicKey(publicKeyResource);
+        log.info("RSA keys loaded successfully");
     }
 }

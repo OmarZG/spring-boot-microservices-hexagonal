@@ -56,7 +56,7 @@ microservices-hexagonal/
 
 ## 📋 Requisitos Previos
 
-- Java 21 o superior
+- Verificar versión de Java: `java -version` (debe mostrar 21.x)\n- Archivo de colección Postman generado: `auth-postman-collection.json` (ubicado en la raíz del proyecto)
 - Maven 3.8+
 - Docker y Docker Compose
 
