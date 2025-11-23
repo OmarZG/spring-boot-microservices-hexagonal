@@ -16,8 +16,8 @@ import java.util.Base64;
  */
 public class KeyGenerator {
 
-    private static final String PRIVATE_KEY_FILE = "auth-service/src/main/resources/certs/private_key.pem";
-    private static final String PUBLIC_KEY_FILE = "auth-service/src/main/resources/certs/public_key.pem";
+    private static final String PRIVATE_KEY_FILE = "src/main/resources/certs/private_key.pem";
+    private static final String PUBLIC_KEY_FILE = "src/main/resources/certs/public_key.pem";
 
     public static void main(String[] args) {
         try {
