@@ -3,7 +3,7 @@
 > **Serie: Construyendo Microservicios con Spring Boot y Arquitectura Hexagonal**  
 > Parte 1 de 7 - Introducción a la Arquitectura Hexagonal
 
-![Arquitectura Hexagonal](https://via.placeholder.com/800x400/4A90E2/FFFFFF?text=Hexagonal+Architecture)
+![Arquitectura Hexagonal](https://placehold.co/800x400/4A90E2/FFFFFF?font=raleway&text=Hexagonal+Architecture)
 
 ## 📖 Introducción
 
