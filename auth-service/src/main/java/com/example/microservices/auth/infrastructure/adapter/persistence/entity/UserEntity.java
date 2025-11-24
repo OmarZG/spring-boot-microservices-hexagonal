@@ -48,6 +48,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;
 
