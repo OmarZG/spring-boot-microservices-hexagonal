@@ -1,7 +1,5 @@
 package com.example.microservices.auth.application.dto;
 
-import java.time.Instant;
-
 /**
  * Authentication response DTO using Java Record
  */
